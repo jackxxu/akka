@@ -3,7 +3,6 @@ require 'jbundler'
 
 java_import 'java.io.Serializable'
 java_import 'akka.actor.UntypedActor'
-java_import 'akka.actor.ActorRef'
 java_import 'akka.actor.ActorSystem'
 java_import 'akka.actor.UntypedActorFactory'
 java_import 'akka.routing.RoundRobinRouter'
