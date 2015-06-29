@@ -51,32 +51,30 @@ class Worker < UntypedActor
     alias_method :create, :new
   end
 
-  def calculate_for_pi(start, no_of_elements)
-    acc = 0.0
-    start_elem = start * no_of_elements
-    end_elem = (start + 1) * no_of_elements - 1
-
-    (start_elem..end_elem).each do |elem|
-      acc = acc + (4.0 * (1 - (elem % 2) * 2) / (2 * elem + 1))
-    end
-
-    return acc
-  end
-
   def onReceive(work)
     result = calculate_for_pi(work.start, work.no_of_elements)
     getSender().tell(Result.new(result), get_self)
   end
+
+  private
+
+    def calculate_for_pi(start, no_of_elements)
+      acc = 0.0
+      start_elem = start * no_of_elements
+      end_elem = (start + 1) * no_of_elements - 1
+
+      (start_elem..end_elem).each do |elem|
+        acc = acc + (4.0 * (1 - (elem % 2) * 2) / (2 * elem + 1))
+      end
+
+      return acc
+    end
+
 end
 
 #Master
 class Master < UntypedActor
   attr_accessor :start, :no_of_workers, :no_of_chunks, :no_of_elements, :listener, :pi, :no_of_results
-
-  class << self
-    alias_method :apply, :new
-    alias_method :create, :new
-  end
 
   def init_worker
     props = Props.new(Worker).withRouter(RoundRobinRouter.new(no_of_workers))
@@ -105,7 +103,7 @@ end
 class Listener < UntypedActor
   class << self
     alias_method :apply, :new
-    alias_method :create, :new
+    alias_method :create, :new # actors needs to implement "create" instance method
   end
 
   def onReceive(message)
@@ -121,19 +119,15 @@ class MasterFactory
   include UntypedActorFactory
 
   def initialize(listener)
-    @@listener = listener
+    @listener = listener
   end
 
   def create
-    self.class.create
-  end
-
-  def self.create
     master = Master.new
     master.no_of_workers = 8
     master.no_of_chunks = 10000
     master.no_of_elements = 10000
-    master.listener = @@listener
+    master.listener = @listener
     master.start = System.currentTimeMillis
     master.pi = 0
     master.no_of_results = 0
@@ -146,6 +140,5 @@ end
 system = ActorSystem.create("PiSystem")
 listener = system.actorOf(Props.new(Listener), "listener")
 
-props_2 = Props.new(MasterFactory.new(listener))
-master = system.actorOf(props_2, "master")
+master = system.actorOf(Props.new(MasterFactory.new(listener)), "master")
 master.tell(Calculate.new)
