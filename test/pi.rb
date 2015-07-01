@@ -77,8 +77,8 @@ class Master < UntypedActor
   attr_accessor :start, :no_of_workers, :no_of_chunks, :no_of_elements, :listener, :pi, :no_of_results
 
   def init_worker
-    props = Props.new(Worker).withRouter(RoundRobinRouter.new(no_of_workers))
-    @worker_router = self.get_context.actorOf(props, "workerRouter")
+    @worker_router = self.get_context.actorOf(
+      Props.new(Worker).withRouter(RoundRobinRouter.new(no_of_workers)), "workerRouter")
   end
 
   def onReceive(message)
@@ -125,7 +125,7 @@ class MasterFactory
   def create
     master = Master.new
     master.no_of_workers = 8
-    master.no_of_chunks = 10000
+    master.no_of_chunks = 200000
     master.no_of_elements = 10000
     master.listener = @listener
     master.start = System.currentTimeMillis
