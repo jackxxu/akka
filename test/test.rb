@@ -27,7 +27,7 @@ end
 
 system = ActorSystem.apply("test-system")
 someone = system.actorOf(Props.new(SomeoneFactory.new))
-
+binding.pry
 someone.tell "hello"
 
 system.awaitTermination
