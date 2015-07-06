@@ -1,0 +1,12 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    rack (1.6.4)
+    sprack (0.0.16)
+
+PLATFORMS
+  java
+
+DEPENDENCIES
+  rack
+  sprack
