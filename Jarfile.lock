@@ -1,0 +1,4 @@
+---
+:runtime:
+- org.scala-lang:scala-library:jar:2.9.2
+- com.typesafe.akka:akka-actor:jar:2.0.2
