@@ -1,3 +1,6 @@
-source "http://repo.typesafe.com/typesafe/releases/"
+source "http://repo.spray.io"
 
-jar "com.typesafe.akka:akka-actor", "2.0.2"
+jar 'com.typesafe.akka:akka-actor_2.11:2.3.9'
+jar 'io.spray:spray-can_2.11:1.3.3'
+jar 'io.spray:spray-routing_2.11:1.3.3'
+jar 'io.spray:spray-testkit_2.11:1.3.3'
