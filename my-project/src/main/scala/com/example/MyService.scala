@@ -26,7 +26,7 @@ trait MyService extends HttpService {
   val myRoute =
     path("") {
       get {
-        Thread sleep 20
+        // Thread sleep 20
         respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
           complete {
             <html>Hello simple application!</html>
